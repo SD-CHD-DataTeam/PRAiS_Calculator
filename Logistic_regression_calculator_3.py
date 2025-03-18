@@ -4,7 +4,7 @@ import math
 
 # Procedure Dictionary with Values
 Procedures = {
-    'None of the above': 0.427,  # Default value
+    'None of the above': 0.427, 
     'Norwood procedure (stage 1)': 0.0,
     'HLHS hybrid approach': 0.0,
     'TAPVC repair + arterial shunt': 0.187,
@@ -57,7 +57,7 @@ Procedures = {
 }
 
 Diagnosis_group = {
-    'Normal': -0.52,  # Default value
+    'Normal': -0.52, 
     'HLHS': 0.0,
     'Truncus arteriousus': 0.0,
     'Pulmonary atresia and IVS': 0.0,
@@ -113,8 +113,8 @@ selected_A_comorbidity = st.selectbox("Acquired comorbidity?", list(A_comorbidit
 selected_C_comorbidity = st.selectbox("Congenital comorbidity?", list(C_comorbidity.keys()), index=0)
 selected_illness = st.selectbox("Severity of illness?", list(illness.keys()), index=0)
 
-weight = st.number_input("Enter a weight value (Kg):", min_value=0.0, step=0.1, value=10.0)
-age = st.number_input("Enter an age value (in years):", min_value=0.0, step=0.1, value=1.0)
+weight = st.number_input("Enter a weight value (Kg):", min_value=0.0, step=0.1, value=3.5)
+age = st.number_input("Enter an age value (in years):", min_value=0.0, step=0.01, value=1.00)
 
 # Predict Button
 if st.button("Predict"):
