@@ -101,7 +101,7 @@ def Predicted_value(x):
 
 # Streamlit UI
 st.title("30-day mortality following paediatric cardiac surgery predictor")
-st.subheader("Modified Multivariable logistic regression adapated from the PRAiS risk model")
+st.markdown('Modified Multivariable logistic regression adapted from the PRAiS risk model, [Link to Paper](https://pubmed.ncbi.nlm.nih.gov/28763186/)', unsafe_allow_html=True)
 
 # User inputs
 selected_diagnosis = st.selectbox("Select broad category of diagnosis", list(Diagnosis_group.keys()), index=0)
