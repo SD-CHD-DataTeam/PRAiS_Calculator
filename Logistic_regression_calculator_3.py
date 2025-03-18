@@ -136,4 +136,5 @@ if st.button("Predict"):
 
     predicted_value = Predicted_value(final_score) * 100
     
-    st.success(f"**Predicted Probability:** {predicted_value:.2f}%")
+    st.success(f"**Predicted Probability of Death:** {predicted_value:.2f}%")
+
