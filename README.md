@@ -58,29 +58,4 @@ If a condition is satisfied, the parameter contributes to the prediction using i
 ## Special Notes
 
 - For **prospective use**, the "Post 2013" coefficient has been absorbed into the model's constant term.
-
-## Usage
-
-Use the coefficients above, checking if each condition is satisfied for your case. If it is, add the coefficient to the linear predictor.
-
-The probability of death is then calculated by applying the sigmoid (logistic) function to the linear predictor:
-
-```math
-p = \frac{1}{1 + e^{-z}}
-```
-
-where:
-- \( p \) is the probability of death within 30 days
-- \( z \) is the sum of the intercept and the relevant coefficients for a patient
-
-## Example
-
-Suppose the sum of the intercept and relevant coefficients (\( z \)) is 0.5, then:
-
-```math
-p = \frac{1}{1 + e^{-0.5}} \approx 0.622
-```
-
-Thus, the predicted probability of death would be approximately 62.2%.
-## Calculator modification
-fOR 
+ 
