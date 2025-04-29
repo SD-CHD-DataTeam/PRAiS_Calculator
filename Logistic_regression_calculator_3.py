@@ -2,95 +2,90 @@ import streamlit as st
 import numpy as np
 import math
 
-# Procedure Dictionary with Values
+# Dictionaries with coefficients
 Procedures = {
  '-Select proposed surgical procedure-': 0.0,
- 'Norwood procedure (Stage 1)': 0.0 ,
+ 'Norwood procedure (Stage 1)': 0.0,
  'HLHS Hybrid Approach': 0.0,
  'TAPVC Repair + Arterial Shunt': 0.216,
- 'TAPVc Repair + Arterial Shunt': 0.216,
  'Truncus and interruption repair': 0.216,
  'Truncus arteriosus repair': 0.216,
- 'Interrupted aortic arch repair': 0.216,
- 'Arterial switch + aortic arch obstruction repair (with-without VSD closure)': 0.216,
- 'Arterial shunt': 0.625,
- 'Arterial switch + VSD closure': -0.09,
  'Isolated Pulmonary artery band': -0.09,
- 'Repair of total anomalous pulmonary venous connection': -0.09,
- 'PDA ligation (surgical)': 0.056,
+ 'Interrupted aortic arch repair': 0.216,
  'Arterial switch (for isolated transposition)': -0.747,
- 'Isolated coarctation/ hypoplastic aortic arch repair': -0.747,
- 'Aortopulmonary window repair': -0.747,
+ 'Arterial switch + VSD closure': -0.09,
+ 'Arterial switch + aortic arch obstruction repair (with-without VSD closure)': 0.216,
  'Senning or Mustard procedure': 1.066,
- 'Mitral valve replacement': 1.066,
- 'Pulmonary vein stenosis procedure': 1.066,
- 'Pulmonary atresia VSD repair': 1.066,
- 'Tetralogy with absent pulmonary valve repair': 1.066,
- 'Ross-Konno procedure': 1.066,
- 'Unifocalisation procedure (with/without shunt)': 1.066,
- 'Heart Transplant': 0.788,
- 'Tricuspid valve replacement': 0.788,
- 'Aortic valve repair': 0.788,
- 'Pulmonary valve replacement': 0.788,
- 'Aortic root replacement (not Ross)': 0.788,
- 'Cardiac conduit replacement': 0.788,
- 'Isolated RV to PA conduit construction': 0.788,
- 'Tricuspid valve repair': 0.788,
- 'Tricupid valve repair': 0.788,
- 'Multiple VSD Closure': 1.1,
- 'Atrioventricular septal defect and tetralogy repair': 1.1,
- 'Cor triatriatum repair': 1.1,
- 'Supravalvar aortic stenosis repair': 1.1,
  'Rastelli - REV procedure': 1.1,
- 'Bidirectional cavopulmonary shunt': -0.787,
- 'Atrioventricular septal defect (complete) repair': -0.964,
- 'Fontan procedure': -0.202,
- 'Aortic valve replacement - Ross': -0.067,
- 'Subvalvar aortic stenosis repair': -0.067,
- 'Mitral valve repair': -0.067,
- 'Sinus Venosus ASD and-or PAPVC repair': -0.067,
- 'Atrioventricular septal defect (partial) repair': -0.937,
  'Tetralogy and Fallot-type DORV repair': -0.937,
- 'Vascular ring procedure': -0.937,
- 'Anomalous coronary artery repair': -1.637,
+ 'Tetralogy with absent pulmonary valve repair': 1.066,
+ 'Atrioventricular septal defect and tetralogy repair': 1.1,
+ 'Pulmonary atresia VSD repair': 1.066,
+ 'Isolated RV to PA conduit construction': 0.788,
+ 'Cardiac conduit replacement': 0.788,
+ 'Unifocalisation procedure (with/without shunt)': 1.066,
+ 'Atrioventricular septal defect (complete) repair': -0.964,
+ 'Atrioventricular septal defect (partial) repair': -0.937,
+ 'Repair of total anomalous pulmonary venous connection': -0.09,
+ 'Sinus Venosus ASD and-or PAPVC repair': -0.067,
+ 'Bidirectional cavopulmonary shunt': -0.787,
+ 'Fontan procedure': -0.202,
+ 'Aortic valve repair': 0.788,
  'Aortic Valve Replacement - non Ross': -1.637,
- 'ASD repair': -1.637,
+ 'Aortic root replacement (not Ross)': 0.788,
+ 'Aortic valve replacement - Ross': -0.067,
+ 'Ross-Konno procedure': 1.066,
+ 'Subvalvar aortic stenosis repair': -0.067,
+ 'Supravalvar aortic stenosis repair': 1.1,
+ 'Tricuspid valve repair': 0.788,
+ 'Tricuspid valve replacement': 0.788,
+ 'Pulmonary valve replacement': 0.788,
+ 'Pulmonary vein stenosis procedure': 1.066,
+ 'Mitral valve repair': -0.067,
+ 'Mitral valve replacement': 1.066,
+ 'Heart Transplant': 0.788,
+ 'Anomalous coronary artery repair': -1.637,
+ 'Arterial shunt': 0.625,
+ 'PDA ligation (surgical)': 0.056,
+ 'Cor triatriatum repair': 1.1,
+ 'Aortopulmonary window repair': -0.747,
+ 'Vascular ring procedure': -0.937,
  'VSD Repair': -1.637,
+ 'Multiple VSD Closure': 1.1,
+ 'ASD repair': -1.637,
  'No Specific Procedure': 0.428}
 
 Diagnosis_group ={'-Select a broad diagnosis type-':0.0,
  'Hypoplastic left heart syndrome': 0.0,
  'Common arterial trunk (truncus arteriosus)  ': 0.0,
  'Pulmonary atresia and IVS': 0.0,
- 'Functionally univentricular heart': -0.168,
  'Pulmonary atresia + VSD (including Fallot type)': -0.168,
+ 'Functionally univentricular heart': -0.168,
+ 'Transposition of great arteries (concordant AV & discordant VA connections) & IVS': -0.468,
  'TGA+VSD/ DORV-TGA type': -0.33,
+ 'Fallot / DORV-Fallot type': -0.054,
+ 'Aortic arch obstruction +/- VSD/ASD': -1.698,
  'Interrupted aortic arch': -0.33,
- 'PDA': -1.521,
- 'Misc congenital primary diagnoses': -0.512,
+ 'Subaortic stenosis (isolated)': -1.241,
+ 'Aortic valve stenosis (isolated)': -0.631,
+ 'Aortic regurgitation': -1.241,
+ 'Atrioventricular septal defect': -0.054,
+ 'Pulmonary stenosis': -1.698,
+ 'Mitral valve abnormality (including supravalvar, subvalvar)': -0.631,
  "Tricuspid valve abnormality (including Ebstein's)": -0.512,
  'TAPVC': -0.512,
- 'Procedure': -0.512,
- 'Comorbidity': -0.512,
- 'Normal': -0.512,
- 'EMPTY/Unknown': -0.512,
- 'Acquired': -0.117,
- 'Atrioventricular septal defect': -0.054,
- 'Fallot / DORV-Fallot type': -0.054,
- 'Aortic valve stenosis (isolated)': -0.631,
- 'Mitral valve abnormality (including supravalvar, subvalvar)': -0.631,
- 'Miscelleneous congenital terms': -0.631,
- 'Transposition of great arteries (concordant AV & discordant VA connections) & IVS': -0.468,
- 'Aortic arch obstruction +/- VSD/ASD': -1.698,
- 'Pulmonary stenosis': -1.698,
- 'Subaortic stenosis (isolated)': -1.241,
- 'Aortic regurgitation': -1.241,
+ 'PDA': -1.521,
  'VSD': -1.241,
  "Interatrial communication ('ASD')": -1.241,
- 'Arrhythmia': -1.241}
+ 'Arrhythmia': -1.241,
+ 'Miscelleneous congenital primary diagnoses': -0.512,
+ 'Acquired heart disease': -0.117,
+ 'Post cardiac procedure': -0.512,
+ 'Normal heart': -0.512,
+ 'EMPTY/Unknown': -0.512}
 
 # Additional Factors
-Bypass = {'Yes': 0.398, 'No': 0,}
+Bypass = {'Yes': 0.398, 'No': 0}
 UVH = {'No': 0, 'Yes': 0.692}
 
 
@@ -131,8 +126,8 @@ Cardiac_risk = [' Ventricular dyssynchrony',
  ' Acute myocardial infarction',
  ' Pre-procedural pulmonary hypertension',
  ' Preprocedural myocardial infarction',
- ' Preprocedural pulmonary hypertension (pulmonary pressure more than or equal to systemic pressure): echo data,',
- ' Preprocedural pulmonary hypertension (pulmonary pressure more than or equal to systemic pressure): catheter data,',
+ ' Preprocedural pulmonary hypertension (pulmonary pressure more than or equal to systemic pressure): echo data',
+ ' Preprocedural pulmonary hypertension (pulmonary pressure more than or equal to systemic pressure): catheter data',
  ' Residual pulmonary hypertension after relief of L to R shunt',
  ' None of the above']
 
@@ -141,7 +136,7 @@ A_comorbidity = [' Pulmonary embolism',
  ' Systemic hypertension',
  ' Primary (essential) systemic hypertension',
  ' Systemic hypertension due to aortic arch obstruction',
- ' Persistent pulmonary hypertension of the newborn (PFC),',
+ ' Persistent pulmonary hypertension of the newborn (PFC)',
  ' Necrotising enterocolitis',
  ' Meconium aspiration',
  ' Pre-procedural coagulation disorder',
@@ -169,13 +164,13 @@ A_comorbidity = [' Pulmonary embolism',
  ' Lung disease',
  ' Asthma',
  ' Acquired bronchial disease',
- ' Airway disease,',
+ ' Airway disease',
  ' Diaphragm disorder: acquired',
- ' Diaphragm paralysis,',
+ ' Diaphragm paralysis',
  ' Oesophageal disorder',
  ' None of the above']
 
-C_comorbidity = [' Visceral heterotaxy (abnormal arrangement thoraco-abdominal organs),',
+C_comorbidity = [' Visceral heterotaxy (abnormal arrangement thoraco-abdominal organs)',
  ' Position or morphology of thoraco-abdominal organs abnormal',
  ' Lung anomaly',
  ' Functionally congenital single lung',
@@ -189,19 +184,19 @@ C_comorbidity = [' Visceral heterotaxy (abnormal arrangement thoraco-abdominal o
  ' 22q11 microdeletion - CATCH 22',
  ' Syndrome/association with cardiac involvement',
  ' DiGeorge sequence',
- ' Friedreich’s ataxia,',
+ ' Friedreich’s ataxia',
  ' Marfan syndrome',
  ' Noonan syndrome',
- ' Pompe’s disease: glycogen storage disease type IIa,',
+ ' Pompe’s disease: glycogen storage disease type IIa',
  ' Tuberous sclerosis',
  ' Williams syndrome (infantile hypercalcaemia)',
  ' Fetal rubella syndrome',
- ' Duchenne’s muscular dystrophy,',
- ' Muscular dystrophy,',
+ ' Duchenne’s muscular dystrophy',
+ ' Muscular dystrophy',
  ' Ehlers-Danlos syndrome',
  ' Alagille syndrome: arteriohepatic dysplasia',
  ' Non-cardiac abnormality associated with heart disease',
- ' Non-cardiothoracic / vascular abnormality (DESCRIBE)',
+ ' Non-cardiothoracic / vascular abnormality',
  ' Cystic fibrosis',
  ' Diaphragmatic hernia',
  ' Tracheo-oesophageal fistula',
@@ -209,19 +204,19 @@ C_comorbidity = [' Visceral heterotaxy (abnormal arrangement thoraco-abdominal o
  ' Duodenal stenosis/atresia',
  ' Sickle cell disease',
  ' Renal abnormality',
- ' Congenital coagulation disorder,',
+ ' Congenital coagulation disorder',
  ' Thoracic / mediastinal abnormality',
  ' Microcephaly',
- ' Choanal atresia,',
+ ' Choanal atresia',
  ' Tracheobronchial malacia',
  ' Hypothyroidism',
  ' Cerebral anomaly',
- ' Connective tissue disease,',
+ ' Connective tissue disease',
  ' Kyphoscoliosis',
  ' Cleft lip / palate',
  ' Loeys-Dietz Syndrome (transforming growth factor beta receptor (TGFBR) gene) ',
  ' Von Willebrand disease ',
- ' Maternally derived fetal disease or syndrome associated with heart disease,',
+ ' Maternally derived fetal disease or syndrome associated with heart disease',
  ' Major anomaly of gastrointestinal system',
  ' Multiple congenital malformations',
  ' Tracheal stenosis',
@@ -286,7 +281,7 @@ def binary_response_C_comorbidity(selected):
         
         
         
-def binary_response_illness(selected):
+def binary_response_illness(selected): 
         if len(selected) == 0:
              return 0.0
         elif len(selected) == 1:
@@ -315,10 +310,10 @@ st.markdown("""
 st.markdown("---")
 # User inputs
 selected_diagnosis = st.selectbox("Select broad category of diagnosis", list(Diagnosis_group.keys()), index=0, 
-                                  help ="Select a category that best reflects the patient's diagnosis, if no option best fits the patient choose either a generic or unspecided category")
-selected_procedure = st.selectbox("Select proposed surgical procedure", list(Procedures.keys()), index=0,placeholder='Select procedure type', 
-                                  help ="Select a code that best reflects the patients proposed procedure")
-selected_Bypass = st.selectbox("Bypass Procedure", list(Bypass.keys()), index=0,help='Select if the cardiac procedure is bypass or non-bypass')
+                                  help ="Select a category that best reflects the patient's diagnosis")
+selected_procedure = st.selectbox("Select proposed surgical procedure", list(Procedures.keys()), index=0, 
+                                  help ="Select a code that best reflects the patients main proposed procedure")
+selected_Bypass = st.selectbox("Bypass Procedure", list(Bypass.keys()), index=0,help="Select if the cardiac procedure is 'bypass' or 'non-bypass'")
 selected_UVH = st.radio("Uni-ventricular Heart", list(UVH.keys()), horizontal=True, help="Select the patient's univentricular status")
 selected_Cardiac_risk = st.multiselect("Select cardiac risk factor status", Cardiac_risk,  help ="Note: Codes greater than one does not account for additional risk")
 selected_A_comorbidity = st.multiselect("Acquired comorbidity", A_comorbidity, help ="Note: Codes greater than one does not account for additional risk")
@@ -374,7 +369,7 @@ if st.button("Predict"):
         procedure_score = Procedures[selected_procedure]
         diagnosis_score = Diagnosis_group[selected_diagnosis]
         
-        # Handle sqrt safely
+        
         sqrt_age = age_years ** 0.5 if age_years > 0 else 0
         sqrt_weight = weight ** 0.5 if weight > 0 else 0
         
@@ -399,4 +394,4 @@ if st.button("Predict"):
         elif 10 <= predicted_value < 20:
             st.error("🔴 **High risk 10–20%**")
         else:
-            st.error("🔴 **Very high risk >20%**")
+            st.error("🔴 **Very high risk >20%**") 
