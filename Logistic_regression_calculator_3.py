@@ -184,7 +184,7 @@ C_comorbidity = [' Visceral heterotaxy (abnormal arrangement thoraco-abdominal o
  ' 22q11 microdeletion - CATCH 22',
  ' Syndrome/association with cardiac involvement',
  ' DiGeorge sequence',
- ' Friedreich’s ataxia',
+ " Friedreich’s ataxia",
  ' Marfan syndrome',
  ' Noonan syndrome',
  ' Pompe’s disease: glycogen storage disease type IIa',
