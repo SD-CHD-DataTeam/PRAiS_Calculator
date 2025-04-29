@@ -320,18 +320,18 @@ selected_A_comorbidity = st.multiselect("Acquired comorbidity", A_comorbidity, h
 selected_C_comorbidity = st.multiselect("Congenital comorbidity", C_comorbidity, help ="Note: Codes greater than one does not account for additional risk")
 selected_illness = st.multiselect("Severity of illness", illness, help ="Note: Codes greater than one does not account for additional risk")
 
-weight = st.number_input("Enter a weight value (Kg):", min_value=0.0, step=0.1, value=0.0 ,help= "Enter patients' weight in Kg at time of procedure" )
+weight = st.number_input("Enter a weight value (Kg):", min_value=0.0, step=0.1, value=0.0 ,help= "Please enter the patient's weight in kilograms (kg) at the time of the procedure")
+    
 unit = st.segmented_control(
     "Select the unit you want to enter the age in:",
     options=["Years", "Months", "Days"], help = 'Choose your prefered unit to enter age in' )
-
 if unit == "Years":
-    age_years = st.number_input("Enter age in years:", min_value=0.0, step=0.1, max_value=16.0)
+    age_years = st.number_input("Enter age in years:", min_value=0.0, step=0.1, max_value=16.0,help="Please enter the patient's age in years at the time of the procedure")
 elif unit == "Months":
-    age_months = st.number_input("Enter age in months:", min_value=0.0, step=0.1, max_value=192.0 )
+    age_months = st.number_input("Enter age in months:", min_value=0.0, step=0.1, max_value=192.0, help="Please enter the patient's age in months at the time of the procedure")
     age_years = age_months / 12
 else:
-    age_days = st.number_input("Enter age in days:", min_value=0, step=1, max_value= 5844,value= 0)
+    age_days = st.number_input("Enter age in days:", min_value=0, step=1, max_value= 5844,value= 0, help="Please enter the patient's age in days at the time of the procedure")
     age_years = float((age_days / 365.25))
 age = age_years
 
